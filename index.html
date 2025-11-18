@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SPAW Flyer Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px;
+      background: #f5f5f5;
+    }
+    canvas {
+      margin-top: 20px;
+      margin-right: 20px;
+      background: #fff; /* optional white background */
+    }
+    input, button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+
+  #downloadBtn {
+  display: block;          /* makes it a block element so margin auto works */
+  margin: 20px auto 0 auto; /* top margin 20px, horizontally centered */
+  padding: 12px 30px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #ff4d4d; /* customize button color */
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+    white-space: nowrap;    
+  transition: background 0.3s, transform 0.2s;
+}
+
+#downloadBtn:hover {
+  background-color: #e60000;
+  transform: scale(1.05);
+}
+
+
+/* Optional: smaller padding and font on small screens */
+@media (max-width: 500px) {
+  #downloadBtn {
+    padding: 20px 60px;
+    font-size: 20px;
+  }
+}
+
+
+
+
+/* Upload button on top of canvas */
+.custom-file-btn {
+  position: absolute;
+  top: 82%;   /* vertical center of container */
+  left: 50%;  /* horizontal center */
+  transform: translate(-50%, -50%); /* perfect centering */
+  padding: 20px 70px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #fff;
+  background-color: rgba(0, 123, 255, 0.85);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.3s, transform 0.2s;
+  z-index: 10;
+}
+
+/* Hover effect */
+.custom-file-btn:hover {
+  background-color: rgba(0, 86, 179, 0.9);
+  transform: translate(-50%, -50%) scale(1.05);
+}
+
+/* Optional: smaller font and padding on small screens */
+@media (max-width: 500px) {
+  .custom-file-btn {
+    top: 112%;   /* vertical center of container */
+  left: 140%;  /* horizontal center */
+  transform: translate(-50%, -50%); /* perfect centering */
+    padding: 20px 50px;
+    font-size: 20px;
+  }
+  
+ 
+}
+#flyerHeading {
+  text-align: center;      /* always centered */
+  font-size: 36px;         /* desktop size */
+  margin: 0 0 30px 0;      /* spacing below heading */
+  line-height: 1.2;
+  word-wrap: break-word;   /* prevent overflow */
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 500px) {
+  #flyerHeading {
+    font-size: 24px;       /* smaller text on mobile */
+    margin: 20px -500px 20px 100px; /* padding from edges */
+   
+  }
+}
+
+  </style>
+</head>
+<body>
+
+
+
+<!-- Hidden file input -->
+<input type="file" id="photoUpload" accept="image/*" style="display:none;">
+
+<!-- Custom button -->
+<label for="photoUpload" class="custom-file-btn">Click to Upload Photo</label>
+
+<h1 id="flyerHeading">"I Will Be Attending" Flyer Generator</h1>
+
+
+<div class="flyer-container">
+  <canvas id="flyerCanvas" width="800" height="1000"></canvas>
+</div>
+
+<button id="downloadBtn">Download Flyer</button>
+
+<script>
+const canvas = document.getElementById('flyerCanvas');
+const ctx = canvas.getContext('2d');
+const upload = document.getElementById('photoUpload');
+const downloadBtn = document.getElementById('downloadBtn');
+
+// Flyer photo frame position and size
+const frameX = 150, frameY = 178, frameWidth = 500, frameHeight = 500;
+
+
+function drawTemplate(userImage) {
+  // Clear canvas
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Draw flyer background
+  const bg = new Image();
+  bg.src = 'spaw1.png'; // your flyer image
+  bg.onload = () => {
+    ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
+
+    // Draw user image
+    if (userImage) {
+      ctx.drawImage(userImage, frameX, frameY, frameWidth, frameHeight);
+    }
+
+    // Draw border/frame for user photo
+    ctx.strokeStyle = 0;
+    ctx.lineWidth = 0;
+    ctx.strokeRect(frameX, frameY, frameWidth, frameHeight);
+
+    // Draw outer border around the flyer
+    ctx.strokeStyle = borderColor;
+    ctx.lineWidth = borderWidth;
+    ctx.strokeRect(borderMargin, borderMargin, canvas.width - 2*borderMargin, canvas.height - 2*borderMargin);
+  }
+}
+
+// Handle photo upload
+upload.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const img = new Image();
+  img.onload = () => drawTemplate(img);
+  img.src = URL.createObjectURL(file);
+});
+
+// Download flyer
+downloadBtn.addEventListener('click', () => {
+  const link = document.createElement('a');
+  link.download = 'flyer.png';
+  link.href = canvas.toDataURL();
+  link.click();
+});
+
+// Initial template without photo
+drawTemplate();
+</script>
+
+</body>
+</html>
