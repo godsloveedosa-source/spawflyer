@@ -114,6 +114,17 @@
     </style>
 </head>
 
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-QZR9PGTDYE"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-QZR9PGTDYE');
+</script>
+
+
 <body>
 
 <h1>SPAW Flyer Generator</h1>
@@ -241,6 +252,13 @@ downloadBtn.addEventListener("click", function(){
     link.download = "SPAW-Flyer.png";
     link.href = canvas.toDataURL();
     link.click();
+
+     // Track download in Google Analytics
+    gtag('event', 'download', {
+        'event_category': 'Flyer',
+        'event_label': 'SPAW Flyer Download',
+        'value': 1
+    });
 
     // Show modal after download
     modal.style.display = "block";
