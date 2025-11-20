@@ -1,190 +1,235 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SPAW Flyer Generator</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 50px;
-      background: #f5f5f5;
-    }
-    canvas {
-      margin-top: 20px;
-      margin-right: 20px;
-      background: #fff; /* optional white background */
-    }
-    input, button {
-      margin: 10px;
-      padding: 10px 20px;
-      font-size: 16px;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SPAW Flyer Generator</title>
 
-  #downloadBtn {
-  display: block;          /* makes it a block element so margin auto works */
-  margin: 20px auto 0 auto; /* top margin 20px, horizontally centered */
-  padding: 12px 30px;
-  font-size: 18px;
-  font-weight: bold;
-  color: #fff;
-  background-color: #ff4d4d; /* customize button color */
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-    white-space: nowrap;    
-  transition: background 0.3s, transform 0.2s;
+    <style>
+        body {
+            margin: 0;
+            padding-right: 20px;
+            padding-left: 20px;
+            padding-top: 20px;
+            background: #fff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 28px;
+        }
+
+        /* Canvas wrapper */
+        canvas {
+            width: 100%;
+            height: auto;
+            max-width: 800px;
+            display: block;
+            margin: 0 auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3); /* horizontal, vertical, blur, color */
+            border-radius: 12px; /* optional: rounded corners */
+        }
+
+        /* Upload button */
+        .upload-btn {
+            margin-top: 30px;
+            background: #5d2222;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 6px;
+            border: 1px solid #5d2222;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        /* Hide file input */
+        #photoUpload {
+            display: none;
+        }
+
+        /* Download button */
+        .download-btn {
+            margin-top: 15px;
+            padding: 12px 24px;
+            background: black;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 18px;
+            display: block;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+            /* register button */
+           .register-btn {
+            background: #007BFF;
+            margin-top: 15px;
+            padding: 12px 24px;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 18px;
+            display: block;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .upload-instruction {
+  text-align: center;
+  color: #555;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  max-width: 600px;
+  font-size: 18px; /* Desktop font size */
 }
 
-#downloadBtn:hover {
-  background-color: #e60000;
-  transform: scale(1.05);
-}
-
-
-/* Optional: smaller padding and font on small screens */
-@media (max-width: 500px) {
-  #downloadBtn {
-    padding: 20px 60px;
-    font-size: 20px;
+/* Mobile adjustments */
+@media (max-width: 600px) {
+  .upload-instruction {
+    font-size: 12px; /* Smaller on mobile */
   }
-}
 
-
-
-
-/* Upload button on top of canvas */
-.custom-file-btn {
-  position: absolute;
-  top: 82%;   /* vertical center of container */
-  left: 50%;  /* horizontal center */
-  transform: translate(-50%, -50%); /* perfect centering */
-  padding: 20px 70px;
-  font-size: 20px;
-  font-weight: bold;
-  color: #fff;
-  background-color: rgba(0, 123, 255, 0.85);
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: background 0.3s, transform 0.2s;
-  z-index: 10;
-}
-
-/* Hover effect */
-.custom-file-btn:hover {
-  background-color: rgba(0, 86, 179, 0.9);
-  transform: translate(-50%, -50%) scale(1.05);
-}
-
-/* Optional: smaller font and padding on small screens */
-@media (max-width: 500px) {
-  .custom-file-btn {
-    top: 112%;   /* vertical center of container */
-  left: 140%;  /* horizontal center */
-  transform: translate(-50%, -50%); /* perfect centering */
-    padding: 20px 50px;
-    font-size: 20px;
-  }
-  
- 
-}
-#flyerHeading {
-  text-align: center;      /* always centered */
-  font-size: 36px;         /* desktop size */
-  margin: 0 0 30px 0;      /* spacing below heading */
-  line-height: 1.2;
-  word-wrap: break-word;   /* prevent overflow */
-}
-
-/* Responsive adjustments for mobile */
-@media (max-width: 500px) {
-  #flyerHeading {
-    font-size: 24px;       /* smaller text on mobile */
-    margin: 20px -500px 20px 100px; /* padding from edges */
-   
-  }
-}
-
-  </style>
+        /* Mobile responsiveness */
+        @media(max-width:600px) {
+            .upload-btn, .download-btn, .register-btn  {
+                width: 90%;
+            }
+            h1 {
+                font-size: 22px;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
+    <h1>SPAW Flyer Generator</h1>
+
+   <p class="upload-instruction">
+  For best results, please upload photos with some space above your head so the image fits perfectly in the circular frame.
+</p>
 
 
-<!-- Hidden file input -->
-<input type="file" id="photoUpload" accept="image/*" style="display:none;">
+    <div class="flyer-container">
+        <canvas id="flyerCanvas" width="800" height="1000"></canvas>
+    </div>
 
-<!-- Custom button -->
-<label for="photoUpload" class="custom-file-btn">Click to Upload Photo</label>
+    <!-- Upload Photo Button -->
+    <button class="upload-btn" id="uploadBtn">Upload Photo</button>
+    <input type="file" id="photoUpload" accept="image/*">
 
-<h1 id="flyerHeading">"I Will Be Attending" Flyer Generator</h1>
+    <!-- Download Flyer Button -->
+    <button class="download-btn" id="downloadBtn">Download Flyer</button>
 
+     <!-- Register Button -->
+    <button class="register-btn" id="registerBtn">Register for Spaw</button>
 
-<div class="flyer-container">
-  <canvas id="flyerCanvas" width="800" height="1000"></canvas>
-</div>
-
-<button id="downloadBtn">Download Flyer</button>
 
 <script>
-const canvas = document.getElementById('flyerCanvas');
-const ctx = canvas.getContext('2d');
-const upload = document.getElementById('photoUpload');
-const downloadBtn = document.getElementById('downloadBtn');
+    const canvas = document.getElementById("flyerCanvas");
+    const ctx = canvas.getContext("2d");
 
-// Flyer photo frame position and size
-const frameX = 150, frameY = 178, frameWidth = 500, frameHeight = 500;
+    const uploadBtn = document.getElementById("uploadBtn");
+    const uploadInput = document.getElementById("photoUpload");
+    const downloadBtn = document.getElementById("downloadBtn");
 
+    uploadBtn.onclick = () => uploadInput.click();
 
-function drawTemplate(userImage) {
-  // Clear canvas
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let template = new Image();
+    template.src = "template.png"; // <-- your flyer background image
 
-  // Draw flyer background
-  const bg = new Image();
-  bg.src = 'spaw1.png'; // your flyer image
-  bg.onload = () => {
-    ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
+    let userImage = null;
 
-    // Draw user image
-    if (userImage) {
-      ctx.drawImage(userImage, frameX, frameY, frameWidth, frameHeight);
+    // Circle position settings (easy to adjust)
+    let circleX = 389.5; // horizontal (original canvas 800px)
+    let circleY = 353.5; // vertical (original canvas 1000px)
+
+    template.onload = () => drawTemplate();
+
+    uploadInput.addEventListener("change", function(e){
+        const file = e.target.files[0];
+        if(!file) return;
+
+        let reader = new FileReader();
+        reader.onload = function(event){
+            userImage = new Image();
+            userImage.onload = drawTemplate;
+            userImage.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
+
+    function drawTemplate(){
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw flyer background
+        ctx.drawImage(template, 0, 0, canvas.width, canvas.height);
+
+        // Responsive circle radius
+        const radius = canvas.width * 0.265;
+
+        // Responsive circle position
+        const centerX = (circleX / 800) * canvas.width;
+        const centerY = (circleY / 1000) * canvas.height;
+
+        if(userImage){
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            ctx.clip();
+
+            // Auto crop image to fit circle
+            const imgAspect = userImage.width / userImage.height;
+            const frameDiameter = radius * 2;
+            let sx, sy, sw, sh;
+
+            if(imgAspect > 1){
+                sh = userImage.height;
+                sw = sh;
+                sx = (userImage.width - sw)/2;
+                sy = 0;
+            } else {
+                sw = userImage.width;
+                sh = sw;
+                sx = 0;
+                sy = (userImage.height - sh)/2;
+            }
+
+            ctx.drawImage(userImage, sx, sy, sw, sh,
+                centerX - radius, centerY - radius,
+                frameDiameter, frameDiameter
+            );
+
+            ctx.restore();
+        }
+
+        // Draw circle border
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+        ctx.lineWidth = 0;
+        ctx.strokeStyle = "#000";
+        ctx.stroke();
     }
 
-    // Draw border/frame for user photo
-    ctx.strokeStyle = 0;
-    ctx.lineWidth = 0;
-    ctx.strokeRect(frameX, frameY, frameWidth, frameHeight);
+    downloadBtn.addEventListener("click", function(){
+        let link = document.createElement("a");
+        link.download = "SPAW-Flyer.png";
+        link.href = canvas.toDataURL();
+        link.click();
+    });
 
-    // Draw outer border around the flyer
-    ctx.strokeStyle = borderColor;
-    ctx.lineWidth = borderWidth;
-    ctx.strokeRect(borderMargin, borderMargin, canvas.width - 2*borderMargin, canvas.height - 2*borderMargin);
-  }
-}
+      // Register button opens Google Form in a new tab
+    registerBtn.addEventListener("click", function(){
+        window.open("https://docs.google.com/forms/d/e/1FAIpQLSctuRdaUCp7WSmlyqz0Z9lOsOPQqWbHyxgL1uIgzMuDCWXjPA/viewform?usp=header", "_blank");
+    });
 
-// Handle photo upload
-upload.addEventListener('change', (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  const img = new Image();
-  img.onload = () => drawTemplate(img);
-  img.src = URL.createObjectURL(file);
-});
-
-// Download flyer
-downloadBtn.addEventListener('click', () => {
-  const link = document.createElement('a');
-  link.download = 'flyer.png';
-  link.href = canvas.toDataURL();
-  link.click();
-});
-
-// Initial template without photo
-drawTemplate();
 </script>
 
 </body>
